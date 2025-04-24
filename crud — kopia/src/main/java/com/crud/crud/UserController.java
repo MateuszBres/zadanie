@@ -36,7 +36,6 @@ public class UserController {
     @PutMapping("{id}")
     public ResponseEntity<String> update(@PathVariable long id, @RequestBody User user) {
         userService.validateUniqueFields(user.getUsername(),user.getEmail(),user.getId());
-       // userService.validateStatus(user.getStatus().name());
         userService.updateUser(id, user.getName(), user.getLastname(), user.getUsername(),
                 user.getPassword(), user.getEmail(),user.getStatus().name());
 
@@ -46,9 +45,7 @@ public class UserController {
     public ResponseEntity<String> partialUpdate(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         String username = (String) updates.get("username");
         String email = (String) updates.get("email");
-       // String status = (String) updates.get("status");
         userService.validateUniqueFields(username, email, id);
-       // userService.validateStatus(status);
         userService.partialUpdate(id, updates);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("User updated");
     }
@@ -67,5 +64,6 @@ public class UserController {
     public void deleteAll(){
         userService.deleteall();
     }
+
 
 }
