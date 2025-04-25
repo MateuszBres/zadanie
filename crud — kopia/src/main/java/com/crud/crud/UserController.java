@@ -15,10 +15,14 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("")
+    @GetMapping("/get")
     public List<User> getUser(){
         return userService.getUser();
     }
+
+    @GetMapping("/success")
+    public String successLogin() {return "login to account";}
+
 
     @GetMapping("{id}")
     public Optional<User> getUser (@PathVariable long id){
@@ -41,7 +45,7 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("User updated");
     }
-    @PatchMapping("{id}")
+    @PatchMapping("/public{id}")
     public ResponseEntity<String> partialUpdate(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         String username = (String) updates.get("username");
         String email = (String) updates.get("email");

@@ -18,6 +18,7 @@ public class UserService {
     @Autowired
     private JavaMailSender mailSender;
 
+
     private String generatePassword(){
         int length = 10;
         SecureRandom random = new SecureRandom();
@@ -121,7 +122,7 @@ public class UserService {
         }
     }
 
-    private boolean isSameUsername(Long userId, String username) {
+    public boolean isSameUsername(Long userId, String username) {
         return getUserById(userId)
                 .map(user -> user.getUsername().equals(username))
                 .orElse(false);
