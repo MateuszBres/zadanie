@@ -1,8 +1,11 @@
 package com.crud.crud;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,18 +13,23 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @GetMapping("/get")
+
+    @GetMapping("")
     public List<User> getUser(){
         return userService.getUser();
     }
 
-    @GetMapping("/success")
-    public String successLogin() {return "login to account";}
+    @GetMapping("/token")
+    public CsrfToken csrfToken (HttpServletRequest request){
+        return (CsrfToken) request.getAttribute("_csrf");
+    }
+
 
 
     @GetMapping("{id}")
@@ -37,6 +45,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("User created");
     }
 
+
+
     @PutMapping("{id}")
     public ResponseEntity<String> update(@PathVariable long id, @RequestBody User user) {
         userService.validateUniqueFields(user.getUsername(),user.getEmail(),user.getId());
@@ -45,7 +55,7 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("User updated");
     }
-    @PatchMapping("/public{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<String> partialUpdate(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         String username = (String) updates.get("username");
         String email = (String) updates.get("email");
